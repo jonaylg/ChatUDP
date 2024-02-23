@@ -1,5 +1,7 @@
 package servidorUDP;
 
+import datos.Mensaje;
+
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
@@ -15,6 +17,7 @@ public class MainServerUDP {
 
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
+		Mensaje mensajes=new Mensaje();
 		ArrayList<String> clientes=new ArrayList<>();
 		ArrayList<Integer>puertos=new ArrayList<>();
 		DatagramSocket socket=null;
@@ -95,7 +98,18 @@ public class MainServerUDP {
 						e.printStackTrace();
 					}
 				}
+			}else if(mensaje.equalsIgnoreCase("mostrar_mensajes")){
+				String s=mensajes.mostrar();
+				b= s.getBytes();
+				envio= new DatagramPacket(b,b.length,IPorigen,puerto);
+				try {
+					socket.send(envio);
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 			}else{
+				mensajes.nuevoMensaje(mensaje+"\n");
 				b=mensaje.getBytes();
 				for (int i : puertos){
 					envio= new DatagramPacket(b,b.length,IPorigen,i);

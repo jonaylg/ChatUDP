@@ -39,7 +39,7 @@ public class MainClienteUDP {
 		final DatagramSocket clienteSocket=clientSocket;
 		final InetAddress IPservidorFinal=IPservidor;
 		final String nick=elegirNick(clienteSocket,IPservidorFinal,puerto);
-
+		mensajesAnteriores(clienteSocket,IPservidorFinal,puerto,c);
 		Thread enviarMensaje = new Thread(new Runnable() {
             @Override
             public void run() {
@@ -153,6 +153,47 @@ public class MainClienteUDP {
 		}while (repetido);
 
 		return nick;
+	}
+
+	static void mensajesAnteriores(DatagramSocket clienteSocket, InetAddress IPservidorFinal,int puerto, Cuadro c){
+		System.out.print("quieres ver los mensajes anteriores en el chat?");
+		String respuesta=teclado.nextLine();
+
+		byte[] enviados= new byte[1024];
+
+		if (respuesta.equalsIgnoreCase("si")){
+			enviados="mostrar_mensajes".getBytes();
+
+			DatagramPacket envio = new DatagramPacket(enviados,enviados.length,IPservidorFinal,puerto);
+
+			try {
+				clienteSocket.send(envio);
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			byte[] recibidos=new  byte[1024];
+
+			DatagramPacket recibo= new DatagramPacket(recibidos,recibidos.length);
+
+			System.out.println("esperando datagrama");
+			try {
+				clienteSocket.receive(recibo);
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+
+			byte[] hh=recibo.getData();
+			String mensajes="";
+			for (int i = 0; i < hh.length; i++) {
+				if (hh[i]!=0){
+					mensajes+=(char)hh[i];
+				}
+			}
+			c.recibirMensaje(mensajes);
+		}
+
 	}
 
 }
