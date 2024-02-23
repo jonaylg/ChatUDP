@@ -1,5 +1,7 @@
 package clienteUDP;
 
+import datos.Cuadro;
+
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
@@ -15,7 +17,8 @@ public class MainClienteUDP {
 	static Scanner teclado =new Scanner(System.in);
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
-		
+		Cuadro c=new Cuadro();
+		c.setVisible(true);
 		DatagramSocket clientSocket=null;
 		try {
 			clientSocket=new DatagramSocket();
@@ -43,20 +46,23 @@ public class MainClienteUDP {
 				System.out.print("Escribe:");
             	String texto;
                 do {
-        			texto=nick+": "+teclado.nextLine();
+        			texto=c.esperarEnter();
         			
         			byte[] enviados= new byte[1024];
         			
-        			enviados=texto.getBytes();
-        			
-        			DatagramPacket envio = new DatagramPacket(enviados,enviados.length,IPservidorFinal,puerto);
-        			
-        			try {
-        				clienteSocket.send(envio);
-        			} catch (IOException e) {
-        				// TODO Auto-generated catch block
-        				e.printStackTrace();
-        			}
+        			if (!texto.equalsIgnoreCase("")&&texto!=null){
+						texto=nick+": "+texto;
+						enviados=texto.getBytes();
+
+						DatagramPacket envio = new DatagramPacket(enviados,enviados.length,IPservidorFinal,puerto);
+
+						try {
+							clienteSocket.send(envio);
+						} catch (IOException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+					}
 				} while (!texto.equalsIgnoreCase("fin"));
             }
         });
@@ -81,12 +87,14 @@ public class MainClienteUDP {
 					}
 					
 					byte[] hh=recibo.getData();
-					
+					String mensajeReci="";
 					for (int i = 0; i < hh.length; i++) {
 						if (hh[i]!=0){
-							System.out.print((char)hh[i]);
+							mensajeReci+=(char)hh[i];
 						}
 					}
+					c.recibirMensaje(mensajeReci);
+					System.out.println(mensajeReci);
 					System.out.println();
 				} while (!texto.equalsIgnoreCase("fin"));
             }
