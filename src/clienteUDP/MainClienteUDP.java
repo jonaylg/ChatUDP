@@ -16,22 +16,17 @@ public class MainClienteUDP {
 
 	static Scanner teclado =new Scanner(System.in);
 	public static void main(String[] args) {
-		// TODO Auto-generated method stub
-		Cuadro c=new Cuadro();
-		c.setVisible(true);
+
 		DatagramSocket clientSocket=null;
 		try {
 			clientSocket=new DatagramSocket();
 		} catch (SocketException e1) {
-			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		}
 		InetAddress IPservidor=null;
 		try {
 			IPservidor= InetAddress.getLocalHost();
-			//IPservidor= InetAddress.getByName("192.168.146.250");
 		} catch (UnknownHostException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		int puerto=12345;
@@ -39,6 +34,8 @@ public class MainClienteUDP {
 		final DatagramSocket clienteSocket=clientSocket;
 		final InetAddress IPservidorFinal=IPservidor;
 		final String nick=elegirNick(clienteSocket,IPservidorFinal,puerto);
+		Cuadro c=new Cuadro(nick);
+		c.setVisible(true);
 		mensajesAnteriores(clienteSocket,IPservidorFinal,puerto,c);
 		Thread enviarMensaje = new Thread(new Runnable() {
             @Override
@@ -59,7 +56,6 @@ public class MainClienteUDP {
 						try {
 							clienteSocket.send(envio);
 						} catch (IOException e) {
-							// TODO Auto-generated catch block
 							e.printStackTrace();
 						}
 					}
@@ -82,7 +78,6 @@ public class MainClienteUDP {
 					try {
 						clienteSocket.receive(recibo);
 					} catch (IOException e) {
-						// TODO Auto-generated catch block
 						e.printStackTrace();
 					}
 					
@@ -124,10 +119,8 @@ public class MainClienteUDP {
 			try {
 				clienteSocket.send(envio);
 			} catch (IOException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-			//enviado ////////////////////////////////////
 			byte[] recibidos=new  byte[1024];
 
 			DatagramPacket recibo= new DatagramPacket(recibidos,recibidos.length);
@@ -136,7 +129,6 @@ public class MainClienteUDP {
 			try {
 				clienteSocket.receive(recibo);
 			} catch (IOException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 
@@ -169,7 +161,6 @@ public class MainClienteUDP {
 			try {
 				clienteSocket.send(envio);
 			} catch (IOException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 			byte[] recibidos=new  byte[1024];
@@ -180,7 +171,6 @@ public class MainClienteUDP {
 			try {
 				clienteSocket.receive(recibo);
 			} catch (IOException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 

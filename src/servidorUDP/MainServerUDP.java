@@ -24,7 +24,6 @@ public class MainServerUDP {
 		try {
 			socket = new DatagramSocket(12345);
 		} catch (SocketException e1) {
-			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		}
 		
@@ -40,7 +39,6 @@ public class MainServerUDP {
 			try {
 				socket.receive(recibo);
 			} catch (IOException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 			
@@ -85,7 +83,6 @@ public class MainServerUDP {
 					try {
 						socket.send(envio);
 					} catch (IOException e) {
-						// TODO Auto-generated catch block
 						e.printStackTrace();
 					}
 				}else{
@@ -94,7 +91,6 @@ public class MainServerUDP {
 					try {
 						socket.send(envio);
 					} catch (IOException e) {
-						// TODO Auto-generated catch block
 						e.printStackTrace();
 					}
 				}
@@ -105,7 +101,6 @@ public class MainServerUDP {
 				try {
 					socket.send(envio);
 				} catch (IOException e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 			}else{
@@ -116,7 +111,6 @@ public class MainServerUDP {
 					try {
 						socket.send(envio);
 					} catch (IOException e) {
-						// TODO Auto-generated catch block
 						e.printStackTrace();
 					}
 				}
@@ -124,7 +118,6 @@ public class MainServerUDP {
 
 			
 		}
-//		socket.close();
 	}
 
 }

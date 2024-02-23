@@ -8,8 +8,8 @@ public class Cuadro extends JFrame {
     private JTextArea chatArea;
 
     private String mensaje;
-    public Cuadro() {
-        super("Cliente de Chat");
+    public Cuadro(String nombre) {
+        super("Chat de "+nombre);
 
         // Configuración de la ventana
         setSize(400, 300);
@@ -59,13 +59,11 @@ public class Cuadro extends JFrame {
         String mensaje = mensajeField.getText();
         this.setMensaje(mensaje);
         mensajeField.setText("");
-        // Aquí podrías enviar el mensaje al servidor si lo deseas
         return mensaje;
     }
 
     public void recibirMensaje(String mensaje) {
         chatArea.append(mensaje + "\n");
-        // Aquí podrías enviar el mensaje al servidor si lo deseas
     }
 
 
@@ -75,9 +73,9 @@ public class Cuadro extends JFrame {
             while (true) {
                 Thread.sleep(100);
                 if (this.getMensaje()!=null && !this.getMensaje().equalsIgnoreCase("")) {
-                    String texto = this.getMensaje();  // Elimina el salto de línea adicional
+                    String texto = this.getMensaje();
                     this.setMensaje("");
-                    mensajeField.setText("");  // Borra el texto del campo de texto
+                    mensajeField.setText("");
                     return texto;
                 }
             }
@@ -95,12 +93,4 @@ public class Cuadro extends JFrame {
         this.mensaje = mensaje;
     }
 
-    /*public static void main(String[] args) {
-        SwingUtilities.invokeLater(new Runnable() {
-            public void run() {
-                Cuadro clienteGUI = new Cuadro();
-                clienteGUI.setVisible(true);
-            }
-        });
-    }*/
 }
