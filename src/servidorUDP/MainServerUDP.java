@@ -16,6 +16,7 @@ public class MainServerUDP {
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
 		ArrayList<String> clientes=new ArrayList<>();
+		ArrayList<Integer>puertos=new ArrayList<>();
 		DatagramSocket socket=null;
 		try {
 			socket = new DatagramSocket(12345);
@@ -41,12 +42,32 @@ public class MainServerUDP {
 			}
 			
 			InetAddress IPorigen=recibo.getAddress();
-			int puerto=recibo.getPort();		
+			int puerto=recibo.getPort();
+			boolean existe=false;
+			for (int i: puertos){
+				if (i==puerto){
+					existe=true;
+				}
+			}
+			if (!existe){
+				puertos.add(puerto);
+			}
 						
 			String mensaje = new String(recibo.getData()).trim();			
 			System.out.println(mensaje);
+
+			byte[] b;
+			//enviar mensajes
+			DatagramPacket envio;
+
 			boolean repe=false;
-			if (mensaje.substring(0,7).equalsIgnoreCase("nombre:")){
+			String texto="";
+			try {
+				texto=mensaje.substring(0,7);
+			}catch (StringIndexOutOfBoundsException e){
+				e.printStackTrace();
+			}
+			if (texto.equalsIgnoreCase("nombre:")){
 				for (String s: clientes){
 					System.out.println(s);
 					if (mensaje.equalsIgnoreCase(s)){
@@ -56,19 +77,37 @@ public class MainServerUDP {
 				if (!repe){
 					clientes.add(mensaje);
 					mensaje="correcto";
+					b= mensaje.getBytes();
+					envio= new DatagramPacket(b,b.length,IPorigen,puerto);
+					try {
+						socket.send(envio);
+					} catch (IOException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+				}else{
+					b= mensaje.getBytes();
+					envio= new DatagramPacket(b,b.length,IPorigen,puerto);
+					try {
+						socket.send(envio);
+					} catch (IOException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+				}
+			}else{
+				b=mensaje.getBytes();
+				for (int i : puertos){
+					envio= new DatagramPacket(b,b.length,IPorigen,i);
+					try {
+						socket.send(envio);
+					} catch (IOException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
 				}
 			}
 
-			byte[] b= mensaje.getBytes();
-			
-			DatagramPacket envio = new DatagramPacket(b,b.length,IPorigen,puerto);
-			
-			try {
-				socket.send(envio);
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
 			
 		}
 //		socket.close();

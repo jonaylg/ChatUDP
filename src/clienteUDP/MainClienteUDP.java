@@ -40,9 +40,9 @@ public class MainClienteUDP {
 		Thread enviarMensaje = new Thread(new Runnable() {
             @Override
             public void run() {
+				System.out.print("Escribe:");
             	String texto;
                 do {
-                	System.out.print("Escribe:");
         			texto=nick+": "+teclado.nextLine();
         			
         			byte[] enviados= new byte[1024];
@@ -73,7 +73,6 @@ public class MainClienteUDP {
 					
 					DatagramPacket recibo= new DatagramPacket(recibidos,recibidos.length);
 
-					System.out.println("esperando datagrama");
 					try {
 						clienteSocket.receive(recibo);
 					} catch (IOException e) {
@@ -88,6 +87,7 @@ public class MainClienteUDP {
 							System.out.print((char)hh[i]);
 						}
 					}
+					System.out.println();
 				} while (!texto.equalsIgnoreCase("fin"));
             }
         });
@@ -101,13 +101,15 @@ public class MainClienteUDP {
 	static String elegirNick(DatagramSocket clienteSocket, InetAddress IPservidorFinal,int puerto){
 		boolean repetido=true;
 		String nick;
+		String nombre;
 		do {
 			System.out.print("nick:");
-			nick="nombre:"+teclado.nextLine();
+			nick=teclado.nextLine();
+			nombre="nombre:"+nick;
 
 			byte[] enviados= new byte[1024];
 
-			enviados=nick.getBytes();
+			enviados=nombre.getBytes();
 
 			DatagramPacket envio = new DatagramPacket(enviados,enviados.length,IPservidorFinal,puerto);
 
@@ -137,7 +139,6 @@ public class MainClienteUDP {
 					respuesta+=(char)hh[i];
 				}
 			}
-			System.out.println(respuesta);
 			if (respuesta.equalsIgnoreCase("correcto")){
 				repetido=false;
 			}
